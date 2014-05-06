@@ -114,6 +114,7 @@ $(document).ready ->
   $("#orbitAltitude").on 'input', ->
     n = $('#orbitAltitude').val().trim()
     if !isNaN(parseFloat(n)) and isFinite(n)
+      #root.network.orbit.setApoapsis(root.radius + n * 1000)
       root.network.orbit.semiMajorAxis = root.radius + n * 1000
     return
   

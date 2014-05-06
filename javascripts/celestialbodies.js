@@ -16,7 +16,7 @@
     ctx.scale(1, height / width);
     ctx.arc(0, 0, width, 0, 2 * Math.PI);
     ctx.closePath();
-    return ctx.restore();
+    ctx.restore();
   };
 
   CelestialBody = (function() {

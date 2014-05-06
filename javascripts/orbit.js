@@ -151,6 +151,13 @@
       return this.semiMajorAxis * (1 - this.eccentricity);
     };
 
+    Orbit.prototype.setApoapsis = function(ap) {
+      var semiMajorAxis;
+      semiMajorAxis = (ap + this.periapsis()) / 2;
+      this.eccentricity = ap / semiMajorAxis - 1;
+      return this.semiMajorAxis = semiMajorAxis;
+    };
+
     Orbit.prototype.apoapsisAltitude = function() {
       return this.apoapsis() - this.referenceBody.radius;
     };

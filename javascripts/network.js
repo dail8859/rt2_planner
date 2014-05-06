@@ -8,7 +8,7 @@
     ctx.scale(1, height / width);
     ctx.arc(0, 0, width, 0, 2 * Math.PI);
     ctx.closePath();
-    return ctx.restore();
+    ctx.restore();
   };
 
   (typeof exports !== "undefined" && exports !== null ? exports : this).Network = Network = (function() {
@@ -66,40 +66,36 @@
     };
 
     Network.prototype.drawConnections = function(ctx) {
-      var alpha, h, l, pos, r, _i, _len, _ref;
-      alpha = (2 * Math.PI) / this.n;
-      r = this.orbit.apoapsis();
-      l = 2 * Math.sin(0.5 * alpha) * r;
-      h = Math.cos(0.5 * alpha) * r;
-      if (this.antenna.isOmni() && l < this.antenna.range) {
-        ctx.save();
-        ctx.lineWidth = 1.5;
-        if (h < this.referenceBody.radius) {
-          ctx.strokeStyle = "rgb(200, 0, 0)";
-        } else {
-          ctx.strokeStyle = "rgb(185, 255, 0)";
-        }
-        r = s(r);
-        ctx.beginPath();
-        pos = this.positionCache[0];
-        ctx.save();
-        ctx.rotate(pos.trueAnomaly);
-        ctx.moveTo(s(pos.altitude), 0);
-        ctx.restore();
-        _ref = this.positionCache.slice(1);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          pos = _ref[_i];
+      var a, b, gamma, gprime, h, i, j, l, pos, _i, _ref;
+      ctx.lineWidth = 1.5;
+      for (i = _i = 0, _ref = this.positionCache.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        j = (i + 1) % this.positionCache.length;
+        a = this.positionCache[i].altitude;
+        b = this.positionCache[j].altitude;
+        gamma = Math.abs(this.positionCache[i].trueAnomaly - this.positionCache[j].trueAnomaly);
+        gamma = Math.min((2 * Math.PI) - gamma, gamma);
+        l = Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(gamma));
+        if (this.antenna.isOmni() && l < this.antenna.range) {
+          gprime = Math.PI / 2 - Math.acos((a * Math.sin(gamma)) / l);
+          h = b * Math.sin(gprime);
+          ctx.beginPath();
+          if (h < this.referenceBody.radius) {
+            ctx.strokeStyle = "rgb(200, 0, 0)";
+          } else {
+            ctx.strokeStyle = "rgb(185, 255, 0)";
+          }
+          pos = this.positionCache[i];
+          ctx.save();
+          ctx.rotate(pos.trueAnomaly);
+          ctx.moveTo(s(pos.altitude), 0);
+          ctx.restore();
+          pos = this.positionCache[j];
           ctx.save();
           ctx.rotate(pos.trueAnomaly);
           ctx.lineTo(s(pos.altitude), 0);
           ctx.restore();
+          ctx.stroke();
         }
-        pos = this.positionCache[0];
-        ctx.save();
-        ctx.rotate(pos.trueAnomaly);
-        ctx.lineTo(s(pos.altitude), 0);
-        ctx.restore();
-        ctx.stroke();
       }
     };
 

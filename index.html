@@ -93,10 +93,6 @@
       .radio:last-child {
         padding-bottom: 7px;
       }
-      
-      #ex1Slider .slider-selection {
-        background: #BABABA;
-      }
     </style>
   </head>
   <body>
@@ -121,43 +117,45 @@
             </div> -->
           </div>
           <div class="col-sm-4 col-md-4 col-lg-4">
-            <legend>Network Parameters</legend>
-            <div class="form-group">
-              <label class="col-sm-4 col-md-4 control-label" for="originSelect">Origin</label>
-              <div class="col-sm-8 col-md-8">
-                <div class="form-inline">
-                  <div class="form-group">
-                    <select id="originSelect" class="form-control">
-                    </select>
+            <div class="row">
+              <legend>Network Parameters</legend>
+              <div class="form-group">
+                <label class="col-sm-4 col-md-4 control-label" for="originSelect">Origin</label>
+                <div class="col-sm-8 col-md-8">
+                  <div class="form-inline">
+                    <div class="form-group">
+                      <select id="originSelect" class="form-control">
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-4 col-md-4 control-label" for="antennaSelect">Antenna</label>
-              <div class="col-sm-8 col-md-8">
-                <div class="form-inline">
-                  <div class="form-group">
-                    <select id="antennaSelect" class="form-control">
-                    </select>
+              <div class="form-group">
+                <label class="col-sm-4 col-md-4 control-label" for="antennaSelect">Antenna</label>
+                <div class="col-sm-8 col-md-8">
+                  <div class="form-inline">
+                    <div class="form-group">
+                      <select id="antennaSelect" class="form-control">
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-4 col-md-4 control-label" for="orbitAltitude">Altitude</label>
-              <div class="col-sm-8 col-md-8">
-                <div class="input-group">
-                  <input type="number" class="form-control" id="orbitAltitude" value="100" min="0">
-                  <span class="altitude input-group-addon" data-toggle="tooltip" data-placement="right" title="Above mean surface level">km</span>
+              <div class="form-group">
+                <label class="col-sm-4 col-md-4 control-label" for="orbitAltitude">Altitude</label>
+                <div class="col-sm-8 col-md-8">
+                  <div class="input-group">
+                    <input type="number" class="form-control" id="orbitAltitude" value="100" min="0">
+                    <span class="altitude input-group-addon" data-toggle="tooltip" data-placement="right" title="Above mean surface level">km</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-4 col-md-4 control-label" for="networkSatellites">Satellites</label>
-              <div class="col-sm-8 col-md-8">
-                <div class="input-group">
-                  <input type="number" class="form-control" id="networkSatellites" value="6" min="1" max="50">
+              <div class="form-group">
+                <label class="col-sm-4 col-md-4 control-label" for="networkSatellites">Satellites</label>
+                <div class="col-sm-8 col-md-8">
+                  <div class="input-group">
+                    <input type="number" class="form-control" id="networkSatellites" value="6" min="1" max="50">
+                  </div>
                 </div>
               </div>
             </div>
@@ -170,10 +168,28 @@
                 </div>
               </div>
             </div> -->
+            <div class="row">
+              <legend style="margin-top: 30px;">Instructions</legend>
+              <div style="margin-left: 20px;">
+                <p>
+                  Save time and Kerbals by planning your next satellite network before you launch! Set your parameters and see the network connectivity.
+                  Yellow lines indicate a good connection, red lines are connections that are blocked.
+                </p>
+                <p>Scroll to zoom in and out. Normal KSP controls can be used for timewarping.</p>
+                <p><i><b>Note:</b> This is currently under development and not complete, but still useful for planning. Current limitations include:
+                  <ul>
+                    <li>Not accounting for orbit inclination</li>
+                    <li>Circular orbits for networks</li>
+                    <li>Evenly spaced satellites</li>
+                    <li>Omni antennas only</li>
+                  </ul>
+                </i></p>
+              </div>
+            </div>
           </div>
         </div>
         <footer>
-          <a href="https://github.com/dail8859/rt2_planner"><img style="position: absolute; top: 0; right: 0; border: 0;" src="img/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+          <a href="https://github.com/dail8859/rt2_planner"><img style="position: absolute; top: 0; right: 0; border: 0;" src="img/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" title="Because I have no idea what I'm doing!"></a>
           <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">RemoteTech2 Network Planner</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. Icons by <a href="http://glyphicons.com/">Glyphicons</a>.
         </footer>
       </section>

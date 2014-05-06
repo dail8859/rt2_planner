@@ -11,6 +11,7 @@ drawEllipse = (ctx, centerX, centerY, width, height) ->
   ctx.arc(0, 0, width, 0, 2 * Math.PI)
   ctx.closePath()
   ctx.restore()
+  return
 
 class CelestialBody
   constructor: (@mass, @radius, @siderealRotation, @color, @orbit, @atmPressure) ->
