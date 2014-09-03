@@ -153,7 +153,7 @@
 
   Bodies.Kerbol = new CelestialBody(1.756567e+28, 2.616e+08, 432000, "#FAE6BE", null);
 
-  Bodies.Moho = new CelestialBody(3.6747079e21, 250000, 1210000, "#695A50", new Orbit(Bodies.Kerbol, 5263138304, 0.2, 7.0, 70.0, 15.0, 3.14));
+  Bodies.Moho = new CelestialBody(2.5263617e21, 250000, 1210000, "#695A50", new Orbit(Bodies.Kerbol, 5263138304, 0.2, 7.0, 70.0, 15.0, 3.14));
 
   Bodies.Eve = new CelestialBody(1.2244127e23, 700000, 80500, "#503C5A", new Orbit(Bodies.Kerbol, 9832684544, 0.01, 2.1, 15.0, 0, 3.14), 5);
 

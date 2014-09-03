@@ -20,14 +20,28 @@ clamp = (n, min, max) -> Math.max(min, Math.min(n, max))
 map = (val, x0, x1, y0, y1) ->
   y0 + (y1 - y0) * ((val - x0)/(x1 - x0))
 
-# Scale a distance based on zoom value
-(exports ? this).s = (x) ->
+metersPerPixel = () ->
   a = root.radius / c.height * 4
   b = root.sphereOfInfluence / c.height * 2
   zoom = zoomValue * zoomValue * zoomValue
-  meters_per_pixel = map(zoom, 0.0, 1.0, a, b)
-  x / meters_per_pixel
+  map(zoom, 0.0, 1.0, a, b)
 
+# Scale a distance based on zoom value
+(exports ? this).s = (x) ->
+  x / metersPerPixel()
+
+# From https://github.com/alexmoon/ksp
+numberWithCommas = (n) ->
+  n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+distanceString = (d) ->
+  if Math.abs(d) > 1e12
+    numberWithCommas((d / 1e9).toFixed()) + " Gm"
+  else if Math.abs(d) >= 1e9
+    numberWithCommas((d / 1e6).toFixed()) + " Mm"
+  else if Math.abs(d) >= 1e6
+    numberWithCommas((d / 1e3).toFixed()) + " km"
+  else
+    numberWithCommas(d.toFixed()) + " m"
 #### Time ####
 # From https://github.com/alexmoon/ksp
 
@@ -77,10 +91,22 @@ draw = ->
     
     ctx.fillStyle = "#FFFFFF"
     ctx.fillText(durationString(t), 10, c.height-10)
+    
+    if measuring
+      ctx.strokeStyle = "#FFFFFF"
+      ctx.beginPath()
+      ctx.moveTo(measureStart[0], measureStart[1])
+      ctx.lineTo(measureEnd[0], measureEnd[1])
+      ctx.stroke()
+      distance = Math.sqrt(Math.pow(measureStart[0] - measureEnd[0], 2) + Math.pow(measureStart[1] - measureEnd[1], 2)) * metersPerPixel()
+      ctx.fillText(distanceString(distance), 10, 20)
     return
   ), 1000 / FPS
   return
 
+measureStart = [0, 0]
+measureEnd = [0, 0]
+measuring = false
 $(document).ready ->
   c = document.getElementById('myCanvas')
   ctx = c.getContext('2d')
@@ -97,6 +123,21 @@ $(document).ready ->
     # Cubic interpolation. Slow zooming when zoomed in, fast zooming when zoomed out
     zoomValue -= (event.deltaY * map(zoomValue*zoomValue, 0.0, 1.0, 0.04, 0.005))
     zoomValue = clamp(zoomValue, 0.0, 1.0)
+    return
+  
+  $('#myCanvas').mousedown (event) ->
+    measureStart = [event.pageX - $(this).offset().left, event.pageY - $(this).offset().top]
+    measureEnd = measureStart
+    measuring = true
+    return
+  
+  $('#myCanvas').mousemove (event) ->
+    if measuring
+      measureEnd = [event.pageX - $(this).offset().left, event.pageY - $(this).offset().top]
+    return
+  
+  $('#myCanvas').mouseup (event) ->
+    measuring = false
     return
   
   $('#myCanvas').keypress (event) ->
