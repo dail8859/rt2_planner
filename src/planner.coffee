@@ -5,24 +5,59 @@ ctx = null
 c = null
 
 prev_time = Date.now()
-warp_index = 1
-warp_factor = [0, 1, 5, 10, 50, 100, 1000, 10000, 100000]
+warp_index = 0
+warp_factor = [1, 5, 10, 50, 100, 1000, 10000, 100000]
 
+# Default network to start with
 root = Bodies.Kerbin
 o = Orbit.fromApoapsisAndPeriapsis(root, root.radius + 100000, root.radius + 100000, 0.0, 0.0, 0.0, 0.0, 0.0)
 root.network = new Network($('#networkSatellites').val(), o, root, Antennas[0])
 
+# Clamps n between min and max
 clamp = (n, min, max) -> Math.max(min, Math.min(n, max))
 
+# Re-maps a number from one range to another
 map = (val, x0, x1, y0, y1) ->
   y0 + (y1 - y0) * ((val - x0)/(x1 - x0))
 
+# Scale a distance based on zoom value
 (exports ? this).s = (x) ->
   a = root.radius / c.height * 4
   b = root.sphereOfInfluence / c.height * 2
   zoom = zoomValue * zoomValue * zoomValue
   meters_per_pixel = map(zoom, 0.0, 1.0, a, b)
   x / meters_per_pixel
+
+#### Time ####
+# From https://github.com/alexmoon/ksp
+
+# Default to Kerbin time
+hoursPerDay = 6
+daysPerYear = 426
+hms = (t) ->
+  hours = (t / 3600) | 0
+  t %= 3600
+  mins = (t / 60) | 0
+  secs = t % 60
+  [hours, mins, secs]
+ydhms = (t) ->
+  [hours, mins, secs] = hms(+t)
+  days = (hours / hoursPerDay) | 0
+  hours = hours % hoursPerDay
+  years = (days / daysPerYear) | 0
+  days = days % daysPerYear
+  [years, days, hours, mins, secs]
+hmsString = (hour, min, sec) ->
+  min = "0#{min}" if min < 10
+  sec = "0#{sec}" if sec < 10
+  "#{hour}:#{min}:#{sec}"
+durationString = (t) ->
+  [years, days, hours, mins, secs] = ydhms(t.toFixed())
+  result = ""
+  result += years + " years " if years > 0
+  result += days + " days " if years > 0 or days > 0
+  result + hmsString(hours, mins, secs)
+##############
 
 draw = ->
   setTimeout ( ->
@@ -35,14 +70,13 @@ draw = ->
     root.draw(ctx, t)
     ctx.restore()
     
-    ctx.restore()
-    
+    # Update the current time including warp factor
     cur_time = Date.now()
     t = t + ((cur_time - prev_time) / 1000 * warp_factor[warp_index])
     prev_time = Date.now()
     
     ctx.fillStyle = "#FFFFFF"
-    ctx.fillText(t.toFixed(), 10, c.height-10)
+    ctx.fillText(durationString(t), 10, c.height-10)
     return
   ), 1000 / FPS
   return
@@ -68,14 +102,14 @@ $(document).ready ->
   $('#myCanvas').keypress (event) ->
     keyCode = event.keyCode || event.which
     switch keyCode
-      when 9
-        event.preventDefault()
-        event.stopPropagation()
-        alert("tab " + event.shiftKey)
-      when 8
-        event.preventDefault()
-        event.stopPropagation()
-        alert("backspace " + event.shiftKey)
+      #when 9
+      #  event.preventDefault()
+      #  event.stopPropagation()
+      #  alert("tab " + event.shiftKey)
+      #when 8
+      #  event.preventDefault()
+      #  event.stopPropagation()
+      #  alert("backspace " + event.shiftKey)
       when 44
         event.preventDefault()
         event.stopPropagation()
