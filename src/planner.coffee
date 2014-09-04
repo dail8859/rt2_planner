@@ -3,6 +3,7 @@ t = 0
 zoomValue = 0.25
 ctx = null
 c = null
+grd = null
 
 prev_time = Date.now()
 warp_index = 0
@@ -68,8 +69,8 @@ hmsString = (hour, min, sec) ->
 durationString = (t) ->
   [years, days, hours, mins, secs] = ydhms(t.toFixed())
   result = ""
-  result += years + " years " if years > 0
-  result += days + " days " if years > 0 or days > 0
+  result += "Y" + (years + 1) + ", "
+  result += "D" + (days + 1) + ", "
   result + hmsString(hours, mins, secs)
 ##############
 
@@ -89,17 +90,40 @@ draw = ->
     t = t + ((cur_time - prev_time) / 1000 * warp_factor[warp_index])
     prev_time = Date.now()
     
-    ctx.fillStyle = "#FFFFFF"
-    ctx.fillText(durationString(t), 10, c.height-10)
+    # Top left box
+    ctx.fillStyle = grd
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(120, 0)
+    ctx.lineTo(120, 20)
+    ctx.lineTo(110, 40)
+    ctx.lineTo(0, 40)
+    ctx.fill()
+    
+    # Timewarp arrows
+    ctx.fillStyle = "lime"
+    for w, i in warp_factor
+      x = 10 + i * 12 + i
+      ctx.beginPath()
+      ctx.moveTo(x, 4)
+      ctx.lineTo(x, 16)
+      ctx.lineTo(x + 12, 10)
+      ctx.fill()
+      if i == warp_index
+        ctx.fillStyle = "black"
+    
+    # Time
+    ctx.fillStyle = "lime"
+    ctx.fillText(durationString(t), 10, 34)
     
     if measuring
-      ctx.strokeStyle = "#FFFFFF"
+      ctx.strokeStyle = "lime"
       ctx.beginPath()
       ctx.moveTo(measureStart[0], measureStart[1])
       ctx.lineTo(measureEnd[0], measureEnd[1])
       ctx.stroke()
       distance = Math.sqrt(Math.pow(measureStart[0] - measureEnd[0], 2) + Math.pow(measureStart[1] - measureEnd[1], 2)) * metersPerPixel()
-      ctx.fillText(distanceString(distance), 10, 20)
+      ctx.fillText(distanceString(distance), 10, c.height - 10)
     return
   ), 1000 / FPS
   return
@@ -115,6 +139,13 @@ $(document).ready ->
   c.setAttribute('width', $("#canvasDiv").width())
   
   ctx.font = "12px Arial"
+  
+  # Gradient for top left menu
+  grd=ctx.createLinearGradient(0, 0, 0, 40);
+  grd.addColorStop(0.0, "#8A939C");
+  grd.addColorStop(0.45, "#8A939C");
+  grd.addColorStop(0.55, "#4C555E");
+  grd.addColorStop(1.0, "#4C555E");
   
   $('#myCanvas').mousewheel (event) ->
     event.preventDefault()
