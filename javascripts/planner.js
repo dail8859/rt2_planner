@@ -177,8 +177,12 @@
     });
     $('#myCanvas').mousedown(function(event) {
       measureStart = [event.pageX - $(this).offset().left, event.pageY - $(this).offset().top];
-      measureEnd = measureStart;
-      measuring = true;
+      if (measureStart[0] < 120 && measureStart[1] < 20) {
+        warp_index = Math.min(Math.floor(Math.max(0, measureStart[0] - 10) / 13), warp_factor.length - 1);
+      } else {
+        measureEnd = measureStart;
+        measuring = true;
+      }
     });
     $('#myCanvas').mousemove(function(event) {
       if (measuring) {

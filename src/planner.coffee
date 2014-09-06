@@ -158,8 +158,13 @@ $(document).ready ->
   
   $('#myCanvas').mousedown (event) ->
     measureStart = [event.pageX - $(this).offset().left, event.pageY - $(this).offset().top]
-    measureEnd = measureStart
-    measuring = true
+    
+    # See if the click was on the warp menu or click+drag to measure
+    if measureStart[0] < 120 and measureStart[1] < 20
+      warp_index = Math.min(Math.floor(Math.max(0, measureStart[0] - 10) / 13), warp_factor.length - 1)
+    else
+      measureEnd = measureStart
+      measuring = true
     return
   
   $('#myCanvas').mousemove (event) ->
