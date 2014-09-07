@@ -20,6 +20,12 @@
 
   warp_factor = [1, 5, 10, 50, 100, 1000, 10000, 100000];
 
+  $('#orbitApoapsis').val(100);
+
+  $('#orbitPeriapsis').val(100);
+
+  $("#networkSatellites").val(6);
+
   root = Bodies.Kerbin;
 
   o = Orbit.fromApoapsisAndPeriapsis(root, root.radius + 100000, root.radius + 100000, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -235,14 +241,38 @@
       prev.network = null;
       root.network.referenceBody = root;
       root.network.orbit.referenceBody = root;
-      return root.network.orbit.semiMajorAxis = root.radius + $('#orbitAltitude').val().trim() * 1000;
+      $('#orbitApoapsis').val(100);
+      $('#orbitPeriapsis').val(100);
+      root.network.orbit.setApoapsis(root.radius + 100000);
+      return root.network.orbit.setPeriapsis(root.radius + 100000);
     });
-    $("#orbitAltitude").on('input', function() {
+    $("#orbitApoapsis").on('input', function() {
       var n;
-      n = $('#orbitAltitude').val().trim();
-      if (!isNaN(parseFloat(n)) && isFinite(n)) {
-        root.network.orbit.semiMajorAxis = root.radius + n * 1000;
+      $("#orbitApoapsis").closest('.form-group').removeClass('has-error').find('.help-block').text('');
+      n = $('#orbitApoapsis').val().trim();
+      if (isNaN(parseFloat(n)) || !isFinite(n)) {
+        $("#orbitApoapsis").closest('.form-group').addClass('has-error').find('.help-block').text('A valid number is required.');
+        return;
       }
+      if (n * 1000 < root.network.orbit.periapsisAltitude()) {
+        $("#orbitApoapsis").closest('.form-group').addClass('has-error').find('.help-block').text('Apoapsis must be greater than or equal to periapsis.');
+        return;
+      }
+      root.network.orbit.setApoapsis(root.radius + n * 1000);
+    });
+    $("#orbitPeriapsis").on('input', function() {
+      var n;
+      $("#orbitPeriapsis").closest('.form-group').removeClass('has-error').find('.help-block').text('');
+      n = $('#orbitPeriapsis').val().trim();
+      if (isNaN(parseFloat(n)) || !isFinite(n)) {
+        $("#orbitPeriapsis").closest('.form-group').addClass('has-error').find('.help-block').text('A valid number is required.');
+        return;
+      }
+      if (n * 1000 > root.network.orbit.apoapsisAltitude()) {
+        $("#orbitPeriapsis").closest('.form-group').addClass('has-error').find('.help-block').text('Periapsis must be less than or equal to apoapsis.');
+        return;
+      }
+      root.network.orbit.setPeriapsis(root.radius + n * 1000);
     });
     $("#networkSatellites").on('input', function() {
       var n;

@@ -155,7 +155,14 @@
       var semiMajorAxis;
       semiMajorAxis = (ap + this.periapsis()) / 2;
       this.eccentricity = ap / semiMajorAxis - 1;
-      return this.semiMajorAxis = semiMajorAxis;
+      this.semiMajorAxis = semiMajorAxis;
+    };
+
+    Orbit.prototype.setPeriapsis = function(pe) {
+      var semiMajorAxis;
+      semiMajorAxis = (this.apoapsis() + pe) / 2;
+      this.eccentricity = this.apoapsis() / semiMajorAxis - 1;
+      this.semiMajorAxis = semiMajorAxis;
     };
 
     Orbit.prototype.apoapsisAltitude = function() {

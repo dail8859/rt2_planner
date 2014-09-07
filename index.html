@@ -128,6 +128,7 @@
                       </select>
                     </div>
                   </div>
+                  <span class="help-block"></span>
                 </div>
               </div>
               <div class="form-group">
@@ -139,15 +140,27 @@
                       </select>
                     </div>
                   </div>
+                  <span class="help-block"></span>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 col-md-4 control-label" for="orbitAltitude">Altitude</label>
+                <label class="col-sm-4 col-md-4 control-label" for="orbitApoapsis">Apoapsis</label>
                 <div class="col-sm-8 col-md-8">
                   <div class="input-group">
-                    <input type="number" class="form-control" id="orbitAltitude" value="100" min="0">
+                    <input type="number" class="form-control" id="orbitApoapsis" value="100" min="0">
                     <span class="altitude input-group-addon" data-toggle="tooltip" data-placement="right" title="Above mean surface level">km</span>
                   </div>
+                  <span class="help-block"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 col-md-4 control-label" for="orbitPeriapsis">Periapsis</label>
+                <div class="col-sm-8 col-md-8">
+                  <div class="input-group">
+                    <input type="number" class="form-control" id="orbitPeriapsis" value="100" min="0">
+                    <span class="altitude input-group-addon" data-toggle="tooltip" data-placement="right" title="Above mean surface level">km</span>
+                  </div>
+                  <span class="help-block"></span>
                 </div>
               </div>
               <div class="form-group">
@@ -179,7 +192,6 @@
                 <p><i><b>Note:</b> This is currently under development and not complete, but still useful for planning. Current limitations include:
                   <ul>
                     <li>Not accounting for orbit inclination</li>
-                    <li>Circular orbits for networks</li>
                     <li>Evenly spaced satellites</li>
                     <li>Omni antennas only</li>
                   </ul>

@@ -95,7 +95,13 @@ newtonsMethod = (x0, f, df) ->
     semiMajorAxis = (ap + @periapsis()) / 2
     @eccentricity = ap / semiMajorAxis - 1
     @semiMajorAxis = semiMajorAxis
-    
+    return
+  
+  setPeriapsis: (pe) ->
+    semiMajorAxis = (@apoapsis() + pe) / 2
+    @eccentricity = @apoapsis() / semiMajorAxis - 1
+    @semiMajorAxis = semiMajorAxis
+    return
   
   apoapsisAltitude: ->
     @apoapsis() - @referenceBody.radius
